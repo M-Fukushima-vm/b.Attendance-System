@@ -4,8 +4,10 @@
     <title><%= full_title(yield(:title)) %></title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'application', media: 'all',
+                                'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application',
+                                'data-turbolinks-track': 'reload' %>
     
     <!--HTML shim (旧IE等　HTML5サポートJS)-->
     <%= render 'layouts/shim' %>
@@ -18,7 +20,17 @@
     <%= render 'layouts/header' %>
     
     <div class="container">
+      
+      <!--フラッシュメッセージの繰り返し処理-->
+      <% flash.each do |message_type, msg| %>
+        <div class="alert alert-<%= message_type %>"><%= msg %></div>
+      <% end %>
+      
       <%= yield %>
+      
+      <!--開発環境のみでのデバッグ情報表示-->
+      <%= debug(params) if Rails.env.development? %>
+      
     </div>
   </body>
 </html>
