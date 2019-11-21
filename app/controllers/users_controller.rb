@@ -3,12 +3,19 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ユーザーにログインを要求
   before_action :correct_user, only: [:edit, :update] # ユーザー自身のみが情報を編集・更新できる
   before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info] # システム管理権限所有かどうか判定
+  before_action :set_one_month, only: :show
   
   def index
     @users = User.paginate(page: params[:page])
   end
   
   def show
+    @worked_sum = @attendances.where.not(started_at: nil).count
+    
+    # "app/controllers/application_controller.rb"の def set_one_month 内に移行
+    
+    # @first_day = Date.current.beginning_of_month
+    # @last_day = @first_day.end_of_month
   end
   
   def new
