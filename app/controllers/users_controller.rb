@@ -6,11 +6,28 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: :show
   
   def index
-    @users = User.paginate(page: params[:page])
+    if current_user.admin?
+      @users = query.paginate(page: params[:page])
+    else
+      flash[:danger] = '権限がありません。'
+      redirect_to root_url
+    end
+    
+    # パラメータとして名前のキーワードを受け取っている場合は絞って検索する
+    # if params[:name].present?
+    # @users = @users.get_by_name params[:name]
+    # end
+    
   end
   
   def show
-    @worked_sum = @attendances.where.not(started_at: nil).count
+    # @worked_sum = @attendances.where.not(started_at: nil).count
+    if current_user?(@user) || current_user.admin?
+      @worked_sum = @attendances.where.not(started_at: nil).count
+    else
+      flash[:danger] = '権限がありません。'
+      redirect_to root_url
+    end
     
     # "app/controllers/application_controller.rb"の def set_one_month 内に移行
     
@@ -73,6 +90,14 @@ class UsersController < ApplicationController
     
     def basic_info_params
     params.require(:user).permit(:department, :basic_time, :work_time)
+    end
+    
+    def query
+        if params[:user].present? && params[:user][:name]
+          User.where('LOWER(name) LIKE ?', "%#{params[:user][:name].downcase}%")
+        else
+          User
+        end
     end
 
 end

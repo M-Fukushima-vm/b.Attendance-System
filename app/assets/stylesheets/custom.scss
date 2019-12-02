@@ -23,6 +23,24 @@ textarea {
   margin-bottom: 10px;
 }
 
+#table-attendances tbody tr:nth-child(odd) td {
+  background-color: #eeeeee;
+}
+
+.user-table tbody tr td {
+  vertical-align: middle;
+}
+
+.btn-gray {
+  color: #333;
+  background-color: #dddddd;
+  border-color: #ccc;
+}
+
+.btn-gray:hover {
+  background-color: #ffffff;
+}
+
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {

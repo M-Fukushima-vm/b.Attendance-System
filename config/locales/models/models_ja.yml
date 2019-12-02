@@ -17,7 +17,7 @@ ja:
           updated_at: 更新日
         attendance:
           worked_on: 日付
-          started_at: 出勤時間
-          finished_at: 退勤時間
+          started_at: 出社時間
+          finished_at: 退社時間
           note: 備考
           user: ユーザーID

@@ -1,5 +1,41 @@
 <% provide(:title, 'All Users') %>
-<h1>ユーザー一覧</h1>
+<h1>
+  <% if params[:user].present? && params[:user][:name].present? %>
+    検索結果
+  <% else %>
+    ユーザー一覧
+  <% end %>
+</h1>
+
+<!--<form class="form-inline text-right">-->
+<!--  <label>ユーザー名検索　　　　　　　　　</label><br>-->
+<!--    <div class="input-group">-->
+<!--	    <input type="text" class="form-control" placeholder="キーワードを入力...">-->
+<!--	    <span class="input-group-btn">-->
+<!--		    <button type="button" class="btn btn-primary">検索</button>-->
+<!--	    </span>-->
+<!--    </div>-->
+<!--</form>-->
+
+<!--<form class="form-inline text-right">-->
+<!--  %= form_tag(users_path, method: "get") do %>-->
+<!--  %= label_tag :name, "ユーザー名検索　　　　　　　　　" %><br>-->
+<!--  <div class="input-group">-->
+<!--    %= text_field_tag :name, params[:name], placeholder: "キーワードを入力...", class: "form-control" %>-->
+<!--    <span class="input-group-btn">%= submit_tag "検索", class: "btn btn-primary" %></span>-->
+<!--  % end %>-->
+<!--  </div>-->
+<!--</form>-->
+
+<form class="form-inline text-right">
+  <%= form_with model: User.new do |form| %>
+    <%= form.label :name, 'ユーザー名検索　　　　　　　　　' %><br>
+    <div class="input-group">
+      <%= form.text_field :name, value: (params[:user][:name] if params[:user]), placeholder: "キーワードを入力...", class: "form-control" %>
+      <span class="input-group-btn"><%= form.submit '検索', class: "btn btn-primary" %></span>
+    </div>
+  <% end %>
+</form>
 
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
@@ -32,9 +68,9 @@
         <% end %>
         <td class="center">
           <% if current_user.admin? && !current_user?(user) %>
-            <%= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
+            <!--%= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>-->
             <%= link_to "削除", user, method: :delete,
-                data: { confirm: "削除してよろしいですか？" },
+                data: { confirm: "「 #{user.name} 」を削除してよろしいですか？" },
                 class: "btn btn-danger" %>
           <% end %>
         </td>
