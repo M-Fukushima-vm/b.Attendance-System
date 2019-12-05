@@ -15,6 +15,9 @@ module AttendancesHelper
     format("%.2f", (((finish - start) / 60) / 60.0))
   end
   
+  # ERROR_FLASH_MESSAGE = ""
+  $error_flash_message = ''
+  
   # 勤怠編集に許可する処理を定義
   def attendances_update_valid?
     attendances_params.each do |id, item| # データベースの操作を保障したい処理
@@ -25,18 +28,21 @@ module AttendancesHelper
       # 【勤務履歴の捏造不可】
       if attendance[:started_at].blank? && attendance[:finished_at].blank? && (item[:started_at].present? || item[:finished_at].present?)
         # flash[:danger] = "勤務履歴のない日に修正入力はできません。"
+        $error_flash_message << "・勤務履歴のない日への出退社時間の入力<br>"
         next
         # redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
       
       # 【勤務履歴の抹消不可】
       elsif attendance[:started_at].present? && attendance[:finished_at].present? && (item[:started_at].blank? || item[:finished_at].blank?)
         # flash[:danger] = "勤務履歴のある日の出退社時間の削除はできません。"
+        $error_flash_message << "・勤務履歴のある日の出退社時間の削除<br>"
         next
         # redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
         
       # 【出勤履歴の抹消不可】
       elsif attendance[:started_at].present? && attendance[:finished_at].blank? && item[:started_at].blank?
         # flash[:danger] = "勤務履歴の削除はできません。"
+        $error_flash_message << "・出勤履歴の削除<br>"
         next
         # redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
         
@@ -46,6 +52,16 @@ module AttendancesHelper
     end
   end
   
-  
+  # update_one_month でのフラッシュ切り替え
+  def update_one_month_flash
+    if $error_flash_message.present?
+      $error_flash_message << "【上記の勤怠編集は許可されていません】<br>"
+      flash[:danger] = $error_flash_message
+      flash[:info] = "該当しない日にちの編集内容のみ更新しました。"
+      $error_flash_message = ''
+    elsif
+      flash[:success] = "1ヶ月分の勤怠編集内容を更新しました。"
+    end
+  end
   
 end

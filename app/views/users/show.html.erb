@@ -77,13 +77,21 @@
           <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
           <td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
           <td>
-            <% if btn_text = attendance_state(day) %>
-              <%= link_to "　#{btn_text}　", user_attendance_path(@user, day), method: :patch, class: "btn btn-gray btn-attendance" %>
+            <% if Date.current == day.worked_on && day.started_at.nil? %>
+              <%= link_to "　出社　", user_attendance_path(@user, day), method: :patch, class: "btn btn-gray btn-attendance" %>
+            <!--% if btn_text = attendance_state(day) %>-->
+              <!--%= link_to "　#{btn_text}　", user_attendance_path(@user, day), method: :patch, class: "btn btn-gray btn-attendance" %>-->
             <% end %>
           </td>
           <td><%= l(day.finished_at.floor_to(15.minutes), format: :hour) if day.finished_at.present? %></td>
           <td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? %></td>
-          <td></td>
+          <td>
+            <% if Date.current == day.worked_on && day.started_at.present? && day.finished_at.nil? %>
+              <%= link_to "　退社　", user_attendance_path(@user, day), method: :patch, class: "btn btn-gray btn-attendance" %>
+            <!--% if btn_text = attendance_state(day) %>-->
+              <!--%= link_to "　#{btn_text}　", user_attendance_path(@user, day), method: :patch, class: "btn btn-gray btn-attendance" %>-->
+            <% end %>
+          </td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
               <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>

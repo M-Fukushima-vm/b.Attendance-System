@@ -37,7 +37,8 @@ class AttendancesController < ApplicationController
     
       attendances_update_valid? # 【勤怠編集に許可する処理】を実行 　# 許可する処理の定義⇨ attendances_helper
       
-      flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
+      update_one_month_flash
+      # flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
       redirect_to user_url(date: params[:date])
 
     end
