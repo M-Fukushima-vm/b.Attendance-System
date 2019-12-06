@@ -43,6 +43,11 @@ module AttendancesHelper
       elsif attendance[:started_at].present? && attendance[:finished_at].blank? && item[:started_at].blank?
         $error_flash_message << "・出勤履歴の削除<br>"
         next
+      
+      # 【時間の関係性の逆転した登録不可】
+      elsif item[:started_at].present? && item[:finished_at].present? && (item[:started_at] > item[:finished_at])
+        $error_flash_message << "・時間の関係性の逆転した登録<br>"
+        next
         
       end
     # 上記スキップ条件に引っかからなかったレコードのみ更新
@@ -53,7 +58,7 @@ module AttendancesHelper
   # update_one_month でのフラッシュ切り替え
   def update_one_month_flash
     if $error_flash_message.present?
-      $error_flash_message << "【上記の勤怠編集は許可されていません】<br>"
+      $error_flash_message << "【上記の許可されていない勤怠編集、誤入力の可能性が見つかりました。】<br>"
       flash[:danger] = $error_flash_message
       flash[:info] = "該当しない日にちの編集内容のみ更新しました。"
       $error_flash_message = ''
