@@ -35,9 +35,9 @@ class AttendancesController < ApplicationController
   def update_one_month
     ActiveRecord::Base.transaction do # トランザクションを開始します。
     
-      attendances_update_valid? # 【勤怠編集に許可する処理】を実行 　# 許可する処理の定義⇨ attendances_helper
+      attendances_update_valid? # 勤怠編集に許可する処理(除外する条件)を定義 　⇨ attendances_helper
       
-      update_one_month_flash
+      update_one_month_flash # update_one_month でのフラッシュ切り替え 　⇨ attendances_helper
       # flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
       redirect_to user_url(date: params[:date])
 
