@@ -38,6 +38,11 @@ module AttendancesHelper
       elsif item[:started_at].present? && item[:finished_at].present? && (item[:started_at] > item[:finished_at])
         $error_flash_message << "・時間の関係性の逆転した登録<br>"
         next
+      
+      # 【出社履歴の抹消不可】
+      elsif attendance[:started_at].present? && item[:started_at].blank?
+        $error_flash_message << "・出社履歴の削除<br>"
+        next
         
       end
     # 上記スキップ条件に引っかからなかったレコードのみ更新
