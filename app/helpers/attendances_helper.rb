@@ -25,25 +25,15 @@ module AttendancesHelper
     # スキップする条件を next
     
       # 【勤務履歴の捏造不可】
-      # if attendance[:started_at].blank? && attendance[:finished_at].blank? && (item[:started_at].present? || item[:finished_at].present?)
-      #   $error_flash_message << "・勤務履歴のない日への出退社時間の入力<br>"
-      #   next
-      
-      # 【退社時刻のみの追記不可】
-      if attendance[:started_at].blank? && attendance[:finished_at].blank? && item[:started_at].blank? && item[:finished_at].present?
-        $error_flash_message << "・退社時刻のみの追記<br>"
+      if attendance[:started_at].blank? && attendance[:finished_at].blank? && (item[:started_at].present? || item[:finished_at].present?)
+        $error_flash_message << "・勤務履歴のない日への出退社時間の入力<br>"
         next
       
       # 【勤務履歴の抹消不可】
       elsif attendance[:started_at].present? && attendance[:finished_at].present? && (item[:started_at].blank? || item[:finished_at].blank?)
         $error_flash_message << "・勤務履歴のある日の出退社時間の削除<br>"
         next
-        
-      # 【出勤履歴の抹消不可】
-      # elsif attendance[:started_at].present? && attendance[:finished_at].blank? && item[:started_at].blank?
-      #   $error_flash_message << "・出勤履歴の削除<br>"
-      #   next
-      
+
       # 【時間の関係性の逆転した登録不可】
       elsif item[:started_at].present? && item[:finished_at].present? && (item[:started_at] > item[:finished_at])
         $error_flash_message << "・時間の関係性の逆転した登録<br>"
