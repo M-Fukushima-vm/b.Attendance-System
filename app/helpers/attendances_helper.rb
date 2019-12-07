@@ -40,9 +40,9 @@ module AttendancesHelper
         next
         
       # 【出勤履歴の抹消不可】
-      elsif attendance[:started_at].present? && attendance[:finished_at].blank? && item[:started_at].blank?
-        $error_flash_message << "・出勤履歴の削除<br>"
-        next
+      # elsif attendance[:started_at].present? && attendance[:finished_at].blank? && item[:started_at].blank?
+      #   $error_flash_message << "・出勤履歴の削除<br>"
+      #   next
       
       # 【時間の関係性の逆転した登録不可】
       elsif item[:started_at].present? && item[:finished_at].present? && (item[:started_at] > item[:finished_at])
